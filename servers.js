@@ -4,11 +4,9 @@ const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -53,13 +51,19 @@ app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.json({ token });
-
+}); // ← This closing bracket was missing!
 
 // Get balance
-app.get
+app.get('/api/balance', authMiddleware, async (req, res) => {
+  const user = await User.findById(req.userId);
+  res.json({ balance: user.balance });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
