@@ -59,7 +59,7 @@ app.post('/api/login', async (req, res) => {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   res.json({ token });
-});
+
 
 // Get balance
-app.get(
+app.get
