@@ -10,7 +10,9 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+// Make sure it looks something like this:
+mongoose.connect(process.env.MONGODB_URI 
+                
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
